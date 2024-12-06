@@ -9,11 +9,16 @@
           class="w-6 h-6"
         />
         <h1
-          :class="['font-bold text-[#363636]', selectedRecording ? 'text-[24px]' : 'text-[32px]']"
+          :class="[
+            'font-bold text-[#363636]',
+            selectedRecording ? 'text-[24px]' : 'text-[32px]',
+          ]"
         >
           Screen Recordings
         </h1>
-        <span class="bg-white text-black rounded-full px-2.5 py-0.4 text-sm border border-mid-grey">
+        <span
+          class="bg-white text-black rounded-full px-2.5 py-0.4 text-sm border border-mid-grey"
+        >
           {{ recordingsCount }}
         </span>
       </div>
@@ -25,7 +30,9 @@
             alt="Chevron Icon to indicate navigation"
             class="w-6 h-6 cursor-pointer"
           />
-          <span class="text-lg font-medium">{{ selectedRecording.screenRecording }}</span>
+          <span class="text-lg font-medium">{{
+            selectedRecording.screenRecording
+          }}</span>
           <img
             src="../assets/share.svg"
             alt="Share this recording"
@@ -45,7 +52,11 @@
           @click="toggleSessionDetails"
           class="flex items-center gap-2 border border-mid-grey rounded-lg px-4 py-2 text-[14px] font-medium cursor-pointer hover:bg-[#F6F6F6] hover:border-mid-grey"
         >
-          <img src="../assets/beats.svg" alt="Session Details Beats Icon" class="w-4 h-4" />
+          <img
+            src="../assets/beats.svg"
+            alt="Session Details Beats Icon"
+            class="w-4 h-4"
+          />
           <span>Session Details</span>
           <font-awesome-icon :icon="['fas', 'chevron-down']" class="w-4 h-4" />
         </button>
@@ -56,7 +67,7 @@
           class="absolute top-12 right-30 w-80 bg-[#FBFBFB] shadow-lg rounded-lg p-3 border border-mid-grey z-10 text-[14px]"
           style="box-shadow: 0px 20px 24px -4px rgba(10, 13, 18, 0.08)"
         >
-          <!-- Engagement Metrics -->
+          <!-- Engagement Metrics update the icon later -->
           <div
             class="mb-2 border border-mid-grey rounded-lg bg-white"
             style="box-shadow: 0px 4px 24px -4px rgba(12, 12, 13, 0.05)"
@@ -64,7 +75,7 @@
             <div class="text-[14px] mb-2 border-b border-gray-300 p-2">
               <h4 class="font-semibold">
                 <img
-                  src="../assets/intent.svg"
+                  src="../assets/arrow-left.svg"
                   alt="Intent Icon"
                   class="inline w-4 h-4 mr-2"
                 />Engagement Metrics
@@ -186,21 +197,33 @@
           <button
             @click="handlePreviousRecording"
             class="bg-white px-4 py-2 text-[14px] font-medium flex items-center gap-2 border-r border-mid-grey hover:bg-[#F6F6F6]"
-            :class="{ 'cursor-not-allowed opacity-50': selectedRecording === null }"
+            :class="{
+              'cursor-not-allowed opacity-50': selectedRecording === null,
+            }"
             :disabled="selectedRecording === null"
           >
-            <img src="../assets/skip-back.svg" alt="Skip to previous recording" class="w-4 h-4" />
+            <img
+              src="../assets/skip-back.svg"
+              alt="Skip to previous recording"
+              class="w-4 h-4"
+            />
             <span>Prev</span>
           </button>
 
           <button
             @click="handleNextRecording"
             class="bg-white px-4 py-2 text-[14px] font-medium flex items-center gap-2"
-            :class="{ 'cursor-not-allowed opacity-50': selectedRecording === null }"
+            :class="{
+              'cursor-not-allowed opacity-50': selectedRecording === null,
+            }"
             :disabled="selectedRecording === null"
           >
             <span>Next</span>
-            <img src="../assets/skip-forward.svg" alt="Skip to next recording" class="w-4 h-4" />
+            <img
+              src="../assets/skip-forward.svg"
+              alt="Skip to next recording"
+              class="w-4 h-4"
+            />
           </button>
         </div>
 
@@ -233,66 +256,66 @@
 </template>
 
 <script setup lang="ts">
-import { type Record } from '../lib/recordingsData'
-import { sessionDetails } from '../lib/sessionDetailsData'
-import Modal from './Modal.vue'
+import { type Record } from "../lib/recordingsData";
+import { sessionDetails } from "../lib/sessionDetailsData";
+import Modal from "./Modal.vue";
 // Import Font Awesome
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ref } from 'vue'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { ref } from "vue";
 
 // Add the icon to the library
-library.add(faChevronDown)
+library.add(faChevronDown);
 
 // Data for the modal
 const modalData = ref({
-  imageUrl: 'https://www.pexels.com/search/high%20resolution/',
-  videoUrl: 'https://example.com/video.mp4',
-  currentLocation: '00:24',
-})
+  imageUrl: "https://www.pexels.com/search/high%20resolution/",
+  videoUrl: "https://example.com/video.mp4",
+  currentLocation: "00:24",
+});
 
 // State to track modal visibility
-const isModalVisible = ref(false)
+const isModalVisible = ref(false);
 // Function to toggle modal visibility
 const toggleModal = () => {
-  isModalVisible.value = !isModalVisible.value
-  console.log('clicked')
-  console.log('Modal visibility:', isModalVisible.value)
-}
+  isModalVisible.value = !isModalVisible.value;
+  console.log("clicked");
+  console.log("Modal visibility:", isModalVisible.value);
+};
 
 // Register the props
 defineProps<{
-  recordingsCount: number
-  selectedRecording: Record | null
-}>()
+  recordingsCount: number;
+  selectedRecording: Record | null;
+}>();
 
 // State for session details visibility
-const isSessionDetailsVisible = ref(false)
+const isSessionDetailsVisible = ref(false);
 
 // Toggle session details dropdown visibility
 const toggleSessionDetails = () => {
-  isSessionDetailsVisible.value = !isSessionDetailsVisible.value
-}
+  isSessionDetailsVisible.value = !isSessionDetailsVisible.value;
+};
 
-const hovering = ref(false)
+const hovering = ref(false);
 
 const emit = defineEmits<{
-  (e: 'update:selectedRecording', value: Record | null): void
-  (e: 'unselectRecording'): void
-  (e: 'selectPreviousRecording'): void
-  (e: 'selectNextRecording'): void
-}>()
+  (e: "update:selectedRecording", value: Record | null): void;
+  (e: "unselectRecording"): void;
+  (e: "selectPreviousRecording"): void;
+  (e: "selectNextRecording"): void;
+}>();
 const handlePreviousRecording = () => {
-  emit('selectPreviousRecording')
-}
+  emit("selectPreviousRecording");
+};
 
 const handleNextRecording = () => {
-  emit('selectNextRecording')
-}
+  emit("selectNextRecording");
+};
 function emitUnselectRecording() {
-  emit('update:selectedRecording', null)
-  emit('unselectRecording')
+  emit("update:selectedRecording", null);
+  emit("unselectRecording");
 }
 </script>
 
