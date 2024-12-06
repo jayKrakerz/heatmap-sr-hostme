@@ -108,7 +108,7 @@
             <div class="text-[14px] mb-2 border-b border-gray-300 p-2">
               <h4 class="font-semibold">
                 <img
-                  src="../assets/allScreens.svg"
+                  src="../assets/allscreens.svg"
                   alt="Device Icon"
                   class="inline w-4 h-4 mr-2"
                 />Device Information
