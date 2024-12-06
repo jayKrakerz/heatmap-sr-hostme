@@ -47,7 +47,7 @@
           <span>/</span>
           <span class="text-gray50">{{
             isLoading ? "00:00" : formatTime(duration)
-            }}</span>
+          }}</span>
         </span>
 
         <!-- Play/Pause Button -->
