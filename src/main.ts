@@ -1,7 +1,9 @@
 // main.js
 import { createApp } from 'vue';
 import './style.css';
+
 import App from './App.vue';
+
 import '@fontsource/inter';
 import '@fontsource/inter/100.css'; // Thin
 import '@fontsource/inter/200.css'; // Extra Light

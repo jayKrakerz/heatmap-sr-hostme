@@ -1,46 +1,20 @@
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import dts from "vite-plugin-dts";
-import { resolve } from "path";
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+import { fileURLToPath, URL } from 'node:url'
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueDevTools from 'vite-plugin-vue-devtools'
+
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    dts({
-      insertTypesEntry: true,
-      include: ["src/**/*.ts", "src/**/*.vue"],
-      beforeWriteFile: (filePath, content) => {
-        return {
-          filePath: filePath.replace(/\.d\.ts$/, ".d.ts"),
-          content: content,
-        };
-      },
-    }),
-    cssInjectedByJsPlugin(),
+    vueJsx(),
+    vueDevTools(),
   ],
-  build: {
-    lib: {
-      entry: resolve(__dirname, "src/index.ts"),
-      name: "HeatmapScreenRecordings",
-      fileName: (format) =>
-        `heatmap-screen-recordings-1.${format === "es" ? "es" : "umd"}.${
-          format === "es" ? "js" : "cjs"
-        }`,
-    },
-    rollupOptions: {
-      external: ["vue"],
-      output: {
-        globals: {
-          vue: "Vue",
-        },
-        exports: "named",
-      },
-    },
-    cssCodeSplit: false,
-  },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src"),
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-});
+})
