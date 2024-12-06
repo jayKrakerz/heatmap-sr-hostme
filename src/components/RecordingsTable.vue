@@ -294,7 +294,7 @@ import purchaseValueIcon from '@/assets/purchase-value.svg'
 import desktopIcon from '@/assets/tb-desktop.svg'
 import mobileIcon from '@/assets/tb-mobile.svg'
 import tabletIcon from '@/assets/tb-tablet.svg'
-import intentIcon from '@/assets/intent.svg'
+import intentIcon from '@/assets/Intent.svg' 
 import browserIcon from '@/assets/browser-icon.svg'
 import webIcon from '@/assets/web-icon.svg'
 
