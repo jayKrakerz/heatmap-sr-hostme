@@ -31,7 +31,7 @@
 
         <!-- Dropdown Menu -->
         <div v-if="isDropdownOpen"
-          class="absolute top-10 -right-20 w-32 bg-white rounded-lg shadow-lg border border-[#BEBEBE] z-10 p-2"
+          class="absolute top-10 -right-20 w-32 bg-white rounded-lg shadow-lg border border-[#BEBEBE] z-[9999] p-2"
           style="box-shadow: 0px 20px 24px -4px rgba(10, 13, 18, 0.08);">
           <div v-for="device in devices" :key="device.name"
             class="flex items-center px-2 py-2  hover:bg-[#DAFBED] hover:border-[#B6EFD7] hover:border hover:rounded-lg cursor-pointer transition-all duration-200"

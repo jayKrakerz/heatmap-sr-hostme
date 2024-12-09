@@ -47,7 +47,7 @@
           <span>/</span>
           <span class="text-gray50">{{
             isLoading ? "00:00" : formatTime(duration)
-          }}</span>
+            }}</span>
         </span>
 
         <!-- Play/Pause Button -->
@@ -249,7 +249,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 100;
   }
 
   .loader {
