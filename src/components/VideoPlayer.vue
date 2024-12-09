@@ -1,5 +1,5 @@
 <template>
-  <div :class="['video-player shadow-md rounded-md', { expanded: isExpanded }]">
+  <div :class="['video-player shadow-md rounded-md h-full', { expanded: isExpanded }]">
     <!-- Loader -->
     <div v-if="isLoading" class="loader-overlay">
       <div class="bg-white p-6 rounded-lg flex flex-col gap-4 justify-center shadow-md">
@@ -10,7 +10,7 @@
 
     <!-- Video Section -->
     <video ref="video" @timeupdate="updateProgress" @loadedmetadata="handleLoadedMetadata" @play="onPlay"
-      @pause="onPause" @canplay="hideLoader" class="video rounded-t-md" autoplay>
+      @pause="onPause" @canplay="hideLoader" class="video rounded-t-md h-[95%]" autoplay>
       <source :src="videoUrl" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
@@ -47,7 +47,7 @@
           <span>/</span>
           <span class="text-gray50">{{
             isLoading ? "00:00" : formatTime(duration)
-            }}</span>
+          }}</span>
         </span>
 
         <!-- Play/Pause Button -->
