@@ -1,73 +1,36 @@
 <template>
   <div class="relative flex flex-col lg:flex-row">
     <!-- Scroll Indicator Overlay -->
-    <ScrollIndicatorOverlay
-      :isVisible="showScrollIndicator"
-      :isRecordingActive="!!selectedRecording"
-    />
+    <ScrollIndicatorOverlay :isVisible="showScrollIndicator" :isRecordingActive="!!selectedRecording" />
 
-    <div
-      :class="[
-        'transition-all duration-500 ease-in-out flex-shrink-0',
-        selectedRecording ? 'lg:w-1/4' : 'w-full',
-      ]"
-    >
+    <div :class="[
+      'transition-all duration-500 ease-in-out flex-shrink-0',
+      selectedRecording ? 'lg:w-1/4' : 'w-full',
+    ]">
       <div class="mt-4">
-        <FilterComponent
-          @filter-device="handleFilterDevice"
-          :isRecordingActive="!!selectedRecording"
-        />
+        <FilterComponent @filter-device="handleFilterDevice" :isRecordingActive="!!selectedRecording" />
       </div>
 
       <!-- Recording Details Displayed When a Recording is Selected -->
-      <div
-        v-if="selectedRecording"
-        class="grid grid-cols-1 text-[14px] max-h-[500px] overflow-y-auto mt-4 border border-[#DDDDDD] scrollbar-hide"
-        @scroll="handleScroll"
-      >
-        <div
-          v-for="(record, index) in filteredSortedRecords"
-          :key="record.screenRecording"
-          :class="[
-            'border-b border-gray-300 cursor-pointer',
-            { active_video: selectedRecording.screenRecording === record.screenRecording },
-            hoveredRow === index ? 'bg-[#F6F6F6]' : '',
-          ]"
-          @click="selectRecording(record, index)"
-          @mouseover="hoveredRow = index"
-          @mouseleave="hoveredRow = null"
-        >
+      <div v-if="selectedRecording"
+        class="grid grid-cols-1 text-[14px] h-[calc(100vh-12rem)] overflow-y-auto mt-4 border border-[#DDDDDD] scrollbar-hide"
+        @scroll="handleScroll">
+        <div v-for="(record, index) in filteredSortedRecords" :key="record.screenRecording" :class="[
+          'border-b border-gray-300 cursor-pointer',
+          { active_video: selectedRecording.screenRecording === record.screenRecording },
+          hoveredRow === index ? 'bg-[#F6F6F6]' : '',
+        ]" @click="selectRecording(record, index)" @mouseover="hoveredRow = index" @mouseleave="hoveredRow = null">
           <!-- First Row: Player Icon, Screen Recording, Device Image, Duration -->
           <div class="flex items-center space-x-4 w-full justify-between py-2 px-4">
             <div class="flex items-center gap-2">
-              <img
-                :src="
-                  selectedRecording.screenRecording === record.screenRecording
-                    ? hoverPlayIcon
-                    : playIcon
-                "
-                alt="Play icon"
-                class="w-8 h-8"
-              />
+              <img :src="selectedRecording.screenRecording === record.screenRecording
+                ? hoverPlayIcon
+                : playIcon
+                " alt="Play icon" class="w-8 h-8" />
               <span>{{ record.screenRecording }}</span>
-              <img
-                v-if="record.deviceType === 'desktop'"
-                :src="desktopIcon"
-                alt="Desktop Icon"
-                class="w-4 h-4"
-              />
-              <img
-                v-if="record.deviceType === 'mobile'"
-                :src="mobileIcon"
-                alt="Mobile Icon"
-                class="w-4 h-4"
-              />
-              <img
-                v-if="record.deviceType === 'tablet'"
-                :src="tabletIcon"
-                alt="Tablet Icon"
-                class="w-4 h-4"
-              />
+              <img v-if="record.deviceType === 'desktop'" :src="desktopIcon" alt="Desktop Icon" class="w-4 h-4" />
+              <img v-if="record.deviceType === 'mobile'" :src="mobileIcon" alt="Mobile Icon" class="w-4 h-4" />
+              <img v-if="record.deviceType === 'tablet'" :src="tabletIcon" alt="Tablet Icon" class="w-4 h-4" />
             </div>
             <div class="flex items-center gap-2">
               <img :src="durationIcon" alt="Duration Icon" class="w-4 h-4" />
@@ -87,16 +50,9 @@
               <span class="align-middle">{{ record.deadClicks }}</span>
             </div>
             <div class="flex items-center gap-2">
-              <img
-                :src="purchaseValueIcon"
-                alt="Purchase Value Icon"
-                class="align-middle w-4 h-4"
-              />
+              <img :src="purchaseValueIcon" alt="Purchase Value Icon" class="align-middle w-4 h-4" />
               <span>
-                <PurchaseValueIndicator
-                  :value="record.purchaseValue"
-                  :percentage="record.purchaseChange"
-                />
+                <PurchaseValueIndicator :value="record.purchaseValue" :percentage="record.purchaseChange" />
               </span>
             </div>
           </div>
@@ -110,76 +66,46 @@
             <thead>
               <tr class="text-left border-b">
                 <th class="px-6 py-3 text-xs font-semibold cursor-pointer">Screen Recording</th>
-                <th
-                  @click="handleSort('intentLevel')"
+                <th @click="handleSort('intentLevel')"
                   class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
-                  @mouseover="hoveredSort = 'intentLevel'"
-                  @mouseleave="hoveredSort = null"
-                >
+                  @mouseover="hoveredSort = 'intentLevel'" @mouseleave="hoveredSort = null">
                   <img :src="intentIcon" alt="Intent Icon" class="w-4 h-4 inline mr-1" />
                   Intent
                   <img :src="getSortIcon('intentLevel')" alt="Sort Icon" class="sort-icon" />
                 </th>
-                <th
-                  @click="handleSort('purchaseValue')"
+                <th @click="handleSort('purchaseValue')"
                   class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
-                  @mouseover="hoveredSort = 'purchaseValue'"
-                  @mouseleave="hoveredSort = null"
-                >
-                  <img
-                    :src="purchaseValueIcon"
-                    alt="Purchase Value Icon"
-                    class="w-4 h-4 inline mr-1"
-                  />
+                  @mouseover="hoveredSort = 'purchaseValue'" @mouseleave="hoveredSort = null">
+                  <img :src="purchaseValueIcon" alt="Purchase Value Icon" class="w-4 h-4 inline mr-1" />
                   Purchase Value
                   <img :src="getSortIcon('purchaseValue')" alt="Sort Icon" class="sort-icon" />
                 </th>
-                <th
-                  @click="handleSort('duration')"
-                  class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
-                  @mouseover="hoveredSort = 'duration'"
-                  @mouseleave="hoveredSort = null"
-                >
+                <th @click="handleSort('duration')" class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
+                  @mouseover="hoveredSort = 'duration'" @mouseleave="hoveredSort = null">
                   <img :src="durationIcon" alt="Duration Icon" class="w-4 h-4 inline mr-1" />
                   Duration
                   <img :src="getSortIcon('duration')" alt="Sort Icon" class="sort-icon" />
                 </th>
-                <th
-                  @click="handleSort('pageClicks')"
-                  class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
-                  @mouseover="hoveredSort = 'pageClicks'"
-                  @mouseleave="hoveredSort = null"
-                >
+                <th @click="handleSort('pageClicks')" class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
+                  @mouseover="hoveredSort = 'pageClicks'" @mouseleave="hoveredSort = null">
                   <img :src="clickIcon" alt="Click Icon" class="w-4 h-4 inline mr-1" />
                   Page Clicks
                   <img :src="getSortIcon('pageClicks')" alt="Sort Icon" class="sort-icon" />
                 </th>
-                <th
-                  @click="handleSort('deadClicks')"
-                  class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
-                  @mouseover="hoveredSort = 'deadClicks'"
-                  @mouseleave="hoveredSort = null"
-                >
+                <th @click="handleSort('deadClicks')" class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
+                  @mouseover="hoveredSort = 'deadClicks'" @mouseleave="hoveredSort = null">
                   <img :src="deadClickIcon" alt="Dead Click Icon" class="w-4 h-4 inline mr-1" />
                   Dead Clicks
                   <img :src="getSortIcon('deadClicks')" alt="Sort Icon" class="sort-icon" />
                 </th>
-                <th
-                  @click="handleSort('entryPage')"
-                  class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
-                  @mouseover="hoveredSort = 'entryPage'"
-                  @mouseleave="hoveredSort = null"
-                >
+                <th @click="handleSort('entryPage')" class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
+                  @mouseover="hoveredSort = 'entryPage'" @mouseleave="hoveredSort = null">
                   <img :src="webIcon" alt="Web Icon" class="w-4 h-4 inline mr-1" />
                   Entry Page
                   <img :src="getSortIcon('entryPage')" alt="Sort Icon" class="sort-icon" />
                 </th>
-                <th
-                  @click="handleSort('browser')"
-                  class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
-                  @mouseover="hoveredSort = 'browser'"
-                  @mouseleave="hoveredSort = null"
-                >
+                <th @click="handleSort('browser')" class="px-6 py-3 text-xs font-semibold text-center cursor-pointer"
+                  @mouseover="hoveredSort = 'browser'" @mouseleave="hoveredSort = null">
                   <img :src="browserIcon" alt="Browser Icon" class="w-4 h-4 inline mr-1" />
                   Browser
                   <img :src="getSortIcon('browser')" alt="Sort Icon" class="sort-icon" />
@@ -188,60 +114,34 @@
             </thead>
 
             <tbody>
-              <tr
-                v-for="(record, index) in filteredSortedRecords"
-                :key="record.screenRecording"
-                :class="[
-                  'border-b cursor-pointer text-[14px]',
-                  { active_video: selectedRecording?.screenRecording === record.screenRecording },
-                  index % 2 ? 'bg-gray-50' : '',
-                  hoveredRow === index ? 'bg-[#F6F6F6]' : '',
-                ]"
-                @mouseover="hoveredRow = index"
-                @mouseleave="hoveredRow = null"
-                @click="selectRecording(record, index)"
-              >
+              <tr v-for="(record, index) in filteredSortedRecords" :key="record.screenRecording" :class="[
+                'border-b cursor-pointer text-[14px]',
+                { active_video: selectedRecording?.screenRecording === record.screenRecording },
+                index % 2 ? 'bg-gray-50' : '',
+                hoveredRow === index ? 'bg-[#F6F6F6]' : '',
+              ]" @mouseover="hoveredRow = index" @mouseleave="hoveredRow = null"
+                @click="selectRecording(record, index)">
                 <td class="px-6 py-4 flex items-center space-x-2">
                   <button class="flex items-center space-x-2">
-                    <img
-                      :src="
-                        selectedRecording?.screenRecording === record.screenRecording ||
-                        hoveredRow === index
-                          ? hoverPlayIcon
-                          : playIcon
-                      "
-                      alt="Play icon"
-                      class="w-8 h-8"
-                    />
+                    <img :src="selectedRecording?.screenRecording === record.screenRecording ||
+                      hoveredRow === index
+                      ? hoverPlayIcon
+                      : playIcon
+                      " alt="Play icon" class="w-8 h-8" />
                     <span>{{ record.screenRecording }}</span>
-                    <img
-                      v-if="record.deviceType === 'desktop'"
-                      :src="desktopIcon"
-                      alt="Desktop Icon"
-                      class="w-4 h-4 inline"
-                    />
-                    <img
-                      v-if="record.deviceType === 'mobile'"
-                      :src="mobileIcon"
-                      alt="Mobile Icon"
-                      class="w-4 h-4 inline"
-                    />
-                    <img
-                      v-if="record.deviceType === 'tablet'"
-                      :src="tabletIcon"
-                      alt="Tablet Icon"
-                      class="w-4 h-4 inline"
-                    />
+                    <img v-if="record.deviceType === 'desktop'" :src="desktopIcon" alt="Desktop Icon"
+                      class="w-4 h-4 inline" />
+                    <img v-if="record.deviceType === 'mobile'" :src="mobileIcon" alt="Mobile Icon"
+                      class="w-4 h-4 inline" />
+                    <img v-if="record.deviceType === 'tablet'" :src="tabletIcon" alt="Tablet Icon"
+                      class="w-4 h-4 inline" />
                   </button>
                 </td>
                 <td class="px-6 py-4 text-center">
                   <BuyingIntentIndicator :intentLevel="record.intentLevel" />
                 </td>
                 <td class="px-6 py-4 text-center">
-                  <PurchaseValueIndicator
-                    :value="record.purchaseValue"
-                    :percentage="record.purchaseChange"
-                  />
+                  <PurchaseValueIndicator :value="record.purchaseValue" :percentage="record.purchaseChange" />
                 </td>
                 <td class="px-6 py-4 text-center">{{ record.duration }}</td>
                 <td class="px-6 py-4 text-center">{{ record.pageClicks }}</td>
@@ -260,11 +160,7 @@
     <!-- Video Player Section -->
     <transition name="slide">
       <div v-if="selectedRecording" class="w-full lg:w-3/4 p-4 bg-gray-100 mt-4 lg:mt-0">
-        <VideoPlayer
-          v-if="selectedRecording"
-          :videoUrl="selectedRecording.videoUrl"
-          @close="unselectRecording"
-        />
+        <VideoPlayer v-if="selectedRecording" :videoUrl="selectedRecording.videoUrl" @close="unselectRecording" />
       </div>
     </transition>
   </div>
@@ -294,7 +190,7 @@ import purchaseValueIcon from '@/assets/purchase-value.svg'
 import desktopIcon from '@/assets/tb-desktop.svg'
 import mobileIcon from '@/assets/tb-mobile.svg'
 import tabletIcon from '@/assets/tb-tablet.svg'
-import intentIcon from '@/assets/Intent.svg' 
+import intentIcon from '@/assets/Intent.svg'
 import browserIcon from '@/assets/browser-icon.svg'
 import webIcon from '@/assets/web-icon.svg'
 
@@ -425,55 +321,55 @@ watch(
 </script>
 
 <style scoped>
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 15ch;
-}
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 15ch;
+  }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 
-.active_video {
-  background-color: #dafbed;
-  border-left: 4px solid #2ec666;
-}
+  .active_video {
+    background-color: #dafbed;
+    border-left: 4px solid #2ec666;
+  }
 
-.sort-icon {
-  display: inline-block;
-  margin-left: 2px;
-  width: 16px;
-}
+  .sort-icon {
+    display: inline-block;
+    margin-left: 2px;
+    width: 16px;
+  }
 
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.5s ease;
-}
+  .slide-enter-active,
+  .slide-leave-active {
+    transition: transform 0.5s ease;
+  }
 
-.slide-enter-from {
-  transform: translateX(100%);
-  /* Start off-screen to the right */
-}
+  .slide-enter-from {
+    transform: translateX(100%);
+    /* Start off-screen to the right */
+  }
 
-.slide-enter-to {
-  transform: translateX(0);
-  /* Slide to its original position */
-}
+  .slide-enter-to {
+    transform: translateX(0);
+    /* Slide to its original position */
+  }
 
-.slide-leave-from {
-  transform: translateX(0);
-  /* Start at its original position */
-}
+  .slide-leave-from {
+    transform: translateX(0);
+    /* Start at its original position */
+  }
 
-.slide-leave-to {
-  transform: translateX(10%);
-  /* Slide out to the right */
-}
+  .slide-leave-to {
+    transform: translateX(10%);
+    /* Slide out to the right */
+  }
 </style>
