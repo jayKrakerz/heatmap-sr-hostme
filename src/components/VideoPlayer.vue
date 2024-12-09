@@ -10,7 +10,7 @@
 
     <!-- Video Section -->
     <video ref="video" @timeupdate="updateProgress" @loadedmetadata="handleLoadedMetadata" @play="onPlay"
-      @pause="onPause" @canplay="hideLoader" class="video rounded-t-md h-[95%]" autoplay>
+      @pause="onPause" @canplay="hideLoader" class="video rounded-t-md !h-[93%]" autoplay>
       <source :src="videoUrl" type="video/mp4" />
       Your browser does not support the video tag.
     </video>

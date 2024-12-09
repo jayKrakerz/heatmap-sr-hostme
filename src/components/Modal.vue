@@ -40,7 +40,8 @@
               </span>
             </label>
           </div>
-          <span class="text-gray-400"> Start at your current location: </span>{{ currentLocation }}
+          <span class="text-gray-400"> Start at your current location: </span>
+          {{ currentTime }}
         </label>
       </div>
       <!-- Modal Footer -->
@@ -55,6 +56,8 @@
 </template>
 
 <script lang="ts">
+import { ref, onMounted } from 'vue';
+
 export default {
   props: {
     visible: {
@@ -81,6 +84,7 @@ export default {
   data() {
     return {
       startAtCurrentLocation: false,
+      currentTime: "",
     };
   },
   emits: ["close", "copy-url"],
@@ -91,9 +95,18 @@ export default {
     closeOnOverlayClick() {
       this.closeModal();
     },
+    updateTime() {
+      const now = new Date();
+      this.currentTime = now.toLocaleTimeString();
+    },
+  },
+  mounted() {
+    this.updateTime();
+    setInterval(this.updateTime, 1000);
   },
 };
 </script>
+
 
 <style scoped>
   .modal-overlay {
