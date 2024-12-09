@@ -21,7 +21,7 @@
             class="w-6 h-6 cursor-pointer" />
           <span class="text-lg font-medium">{{
             selectedRecording.screenRecording
-            }}</span>
+          }}</span>
           <img src="../assets/share.svg" alt="Share this recording" class="w-4 h-4 cursor-pointer"
             @click="toggleModal" />
         </div>
@@ -176,7 +176,7 @@
       </div>
     </template>
     <Modal v-if="isModalVisible" :visible="isModalVisible" :image-url="modalData.imageUrl"
-      :video-url="modalData.videoUrl" :current-location="modalData.currentLocation" @close="toggleModal" />
+      :video-url="modalData.videoUrl" @close="toggleModal" />
   </nav>
 </template>
 
